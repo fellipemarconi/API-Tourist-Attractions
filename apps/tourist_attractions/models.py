@@ -12,7 +12,7 @@ class TouristSpot(models.Model):
     description = models.TextField(max_length=4000)
     is_approved = models.BooleanField(default=False)
     attractions = models.ManyToManyField(Attraction, default='')
-    Comment = models.ManyToManyField(Comment, default='')
+    comment = models.ManyToManyField(Comment, default='')
     
     
     def __str__(self):
