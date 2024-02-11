@@ -1,5 +1,5 @@
 from django.db import models
-
+from ..attractions.models import Attraction
 # Create your models here.
 
 class TouristSpot(models.Model):
@@ -10,6 +10,7 @@ class TouristSpot(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(max_length=4000)
     is_approved = models.BooleanField(default=False)
+    attractions = models.ManyToManyField(Attraction, default='')
     
     def __str__(self):
         return self.name
