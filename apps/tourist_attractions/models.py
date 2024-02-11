@@ -1,5 +1,6 @@
 from django.db import models
 from ..attractions.models import Attraction
+from ..comments_reviews.models import Comment
 # Create your models here.
 
 class TouristSpot(models.Model):
@@ -11,6 +12,8 @@ class TouristSpot(models.Model):
     description = models.TextField(max_length=4000)
     is_approved = models.BooleanField(default=False)
     attractions = models.ManyToManyField(Attraction, default='')
+    Comment = models.ManyToManyField(Comment, default='')
+    
     
     def __str__(self):
         return self.name

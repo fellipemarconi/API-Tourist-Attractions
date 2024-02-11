@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     #apps
     'apps.tourist_attractions',
     'apps.attractions',
+    'apps.comments_reviews',
     #third apps
     'rest_framework',
 ]
