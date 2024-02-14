@@ -14,7 +14,7 @@ class Comment(models.Model):
     comment = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     is_approved = models.BooleanField(default=True)
-    review = models.OneToOneField(Review, on_delete=models.CASCADE, null=True)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, null=True)
     
     def __str__(self) -> str:
         return self.user.first_name

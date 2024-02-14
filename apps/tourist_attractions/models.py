@@ -14,7 +14,7 @@ class TouristSpot(models.Model):
     is_approved = models.BooleanField(default=False)
     attractions = models.ManyToManyField(Attraction, default='')
     comment = models.ManyToManyField(Comment, default='')
-    address = models.OneToOneField(Address, on_delete=models.CASCADE)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
         return self.name
