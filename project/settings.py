@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apps.address',
     #third apps
     'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
 ]
 
