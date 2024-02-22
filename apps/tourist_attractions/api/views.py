@@ -1,11 +1,13 @@
 from rest_framework.viewsets import ModelViewSet
 from ..models import TouristSpot
 from .serializers import TouristSpotSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 
 class TouristAttractionViewSet(ModelViewSet):
-    queryset = TouristSpot.objects.all()
     serializer_class = TouristSpotSerializer
+    filter_backends = [DjangoFilterBackend, ]
+    filterset_fields = ['name', 'description', 'attractions']
     
     def get_queryset(self):
-        qs = TouristSpot.objects.filter(is_approved=True)
-        return qs
+        queryset = TouristSpot.objects.filter(is_approved=True)
+        return queryset

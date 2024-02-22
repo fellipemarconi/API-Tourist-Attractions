@@ -6,7 +6,7 @@ class Attraction(models.Model):
     description = models.TextField()
     work_time = models.TextField()
     minimal_age = models.IntegerField()
-    cover = models.ImageField(upload_to='tourtist-attractions/%Y/%m/', null=True, blank=True)
+    cover = models.ImageField(upload_to='tourist-attractions/attractions/%Y/%m/', null=True, blank=True)
     
     
     def __str__(self) -> str:
