@@ -1,15 +1,12 @@
 from rest_framework import serializers
-from ..models import Comment, Review
+from ..models import Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ('id', 'user', 'comment', 'date',
-                  'is_approved', 'review'
-                  )
-        
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = ('id', 'user', 'note')
+        fields = ('id', 'user', 'comment', 'date', 'review')
+    
+    user = serializers.CharField(source="user.username", read_only=True)
+    
+    

@@ -14,8 +14,8 @@ class TouristSpot(models.Model):
     is_approved = models.BooleanField(default=False)
     attractions = models.ManyToManyField(Attraction, default='')
     comment = models.ManyToManyField(Comment, default='')
-    address = models.OneToOneField(Address, on_delete=models.CASCADE, null=True, blank=True)
-    cover = models.ImageField(upload_to='tourist-attractions/%Y/%m/', null=True, blank=True)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, blank=True)
+    cover = models.ImageField(upload_to='tourist-attractions/%Y/%m/', blank=True)
     
     def __str__(self):
         return self.name
