@@ -12,27 +12,13 @@ from django.contrib.auth import password_validation
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = (
-            'id', 'username', 'first_name', 
-            'last_name', 'email', 'password',
-            'password2'
-        )
-    password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
-    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
-    
+        fields = ('id', 'username', 'email', 'password')
     
     def create(self, validated_data):
-        user = User(
-            username=validated_data.get('username'),
-            email=validated_data.get('email')
-                    )
+        user = User(**validated_data)
         password = validated_data.get('password')
-        password2 = validated_data.get('password2')
-        
-        if password != password2:
-            raise serializers.ValidationError('Your password and confirmation password do not match.', code='invalid')
-        
         user.set_password(password)
+        
         user.save()
         return user
     
@@ -51,8 +37,15 @@ class UserSerializer(serializers.ModelSerializer):
         except exceptions.ValidationError as e:
             errors = list(e.messages)
             raise serializers.ValidationError(errors)
+        
+        return data
     
 class TouristSpotSerializer(serializers.ModelSerializer):
+    attractions = AttractionSerializer(many=True)
+    address = AddressSerializer()
+    comment = CommentSerializer(many=True)
+    
+    
     class Meta:
         model = TouristSpot
         fields = (
@@ -60,7 +53,4 @@ class TouristSpotSerializer(serializers.ModelSerializer):
                 'description', 'attractions','comment',
                 'address', 'cover'
             )
-        
-    attractions = AttractionSerializer(many=True)
-    address = AddressSerializer()
-    comment = CommentSerializer(many=True)
+    

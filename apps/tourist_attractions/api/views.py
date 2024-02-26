@@ -26,12 +26,3 @@ class UserViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = User.objects.filter(username=self.request.user.username) # type:ignore
         return queryset
-    
-    def create(self, request, *args, **kwargs):
-        serializer = UserSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
