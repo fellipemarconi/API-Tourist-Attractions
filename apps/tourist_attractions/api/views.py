@@ -14,7 +14,6 @@ class TouristAttractionViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, ]
     filterset_fields = ['name', 'description', 'attractions']
     permission_classes = [IsAuthenticatedOrReadOnly, ]
-    authentication_classes = [TokenAuthentication, ]
     
     def get_queryset(self):
         queryset = TouristSpot.objects.filter(is_approved=True)
