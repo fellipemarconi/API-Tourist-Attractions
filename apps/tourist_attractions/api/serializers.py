@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from ..models import TouristSpot
 from ...attractions.api.serializers import AttractionSerializer
+from ...attractions.models import Attraction
 from ...address.api.serializers import AddressSerializer
 from ...comments_reviews.api.serializers import CommentSerializer
 
@@ -42,8 +43,8 @@ class UserSerializer(serializers.ModelSerializer):
     
 class TouristSpotSerializer(serializers.ModelSerializer):
     attractions = AttractionSerializer(many=True)
-    address = AddressSerializer()
-    comment = CommentSerializer()
+    address = AddressSerializer(read_only=True)
+    comment = CommentSerializer(read_only=True)
     
     
     class Meta:
@@ -54,3 +55,15 @@ class TouristSpotSerializer(serializers.ModelSerializer):
                 'address', 'cover'
             )
     
+    def create_attractions(self, attractions, tourist_spot):
+        for attraction in attractions:
+            spot = Attraction.objects.create(**attraction)
+            tourist_spot.attractions.add(spot)
+            
+    def create(self, validated_data):
+        attractions = validated_data['attractions']
+        del validated_data['attractions']
+        tourist_spot = TouristSpot.objects.create(**validated_data)
+        self.create_attractions(attractions, tourist_spot)
+        
+        return tourist_spot
