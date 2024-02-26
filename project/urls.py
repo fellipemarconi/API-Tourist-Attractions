@@ -19,12 +19,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework.documentation import include_docs_urls
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('apps.tourist_attractions.urls')),
     path('api/token/', obtain_auth_token),
+    path('api/docs/', include_docs_urls(title='API Docs')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
