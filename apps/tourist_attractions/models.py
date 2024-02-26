@@ -13,8 +13,8 @@ class TouristSpot(models.Model):
     description = models.TextField(max_length=4000)
     is_approved = models.BooleanField(default=False)
     attractions = models.ManyToManyField(Attraction, default='')
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, blank=True)
-    address = models.OneToOneField(Address, on_delete=models.CASCADE, blank=True)
+    comment = models.ForeignKey(Comment, on_delete=models.SET_NULL, null=True, blank=True)
+    address = models.OneToOneField(Address, on_delete=models.SET_NULL, blank=True, null=True)
     cover = models.ImageField(upload_to='tourist-attractions/%Y/%m/', blank=True)
     
     def __str__(self):

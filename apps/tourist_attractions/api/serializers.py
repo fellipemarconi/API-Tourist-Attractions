@@ -43,7 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
 class TouristSpotSerializer(serializers.ModelSerializer):
     attractions = AttractionSerializer(many=True)
     address = AddressSerializer()
-    comment = CommentSerializer(many=True)
+    comment = CommentSerializer()
     
     
     class Meta:
