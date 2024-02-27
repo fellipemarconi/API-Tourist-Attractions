@@ -7,14 +7,20 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import status
+from rest_framework.pagination import LimitOffsetPagination
 
 from django.contrib.auth.models import User
+
+
+class Pagination(LimitOffsetPagination):
+    default_limit = 5
 
 class TouristAttractionViewSet(ModelViewSet):
     serializer_class = TouristSpotSerializer
     filter_backends = [DjangoFilterBackend, ]
     filterset_fields = ['name', 'description', 'attractions']
     permission_classes = [IsAuthenticatedOrReadOnly, ]
+    pagination_class = Pagination
     lookup_field = "id"
     
     def get_queryset(self):
@@ -34,6 +40,7 @@ class TouristAttractionViewSet(ModelViewSet):
     
 class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
+    pagination_class = Pagination
     
     def get_queryset(self):
         queryset = User.objects.filter(username=self.request.user.username) # type:ignore
