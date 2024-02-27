@@ -5,6 +5,7 @@ from ...attractions.models import Attraction
 from ...address.api.serializers import AddressSerializer
 from ...address.models import Address
 from ...comments_reviews.api.serializers import CommentSerializer
+from ...comments_reviews.models import Comment
 
 from django.core import exceptions
 from django.contrib.auth.models import User
@@ -45,7 +46,7 @@ class UserSerializer(serializers.ModelSerializer):
 class TouristSpotSerializer(serializers.ModelSerializer):
     attractions = AttractionSerializer(many=True)
     address = AddressSerializer()
-    comment = CommentSerializer(read_only=True)
+    comment = CommentSerializer()
     
     
     class Meta:
@@ -64,6 +65,12 @@ class TouristSpotSerializer(serializers.ModelSerializer):
     def create_address(self, address, tourist_spot):
         addrs = Address.objects.create(**address)
         tourist_spot.address = addrs
+        
+    def create_comment(self, comment, tourist_spot):
+        user = self.context['request'].user
+        comnt = Comment.objects.create(**comment, user=user, tourist_spot=tourist_spot)
+        
+        tourist_spot.comment = comnt
     
     def create(self, validated_data):
         attractions = validated_data['attractions']
@@ -72,9 +79,14 @@ class TouristSpotSerializer(serializers.ModelSerializer):
         address = validated_data['address']
         del validated_data['address']
         
+        comment = validated_data['comment']
+        del validated_data['comment']
+        
         tourist_spot = TouristSpot.objects.create(**validated_data)
+        
         self.create_attractions(attractions, tourist_spot)
         self.create_address(address, tourist_spot)
+        self.create_comment(comment, tourist_spot)
         
         tourist_spot.save()
         return tourist_spot
