@@ -5,6 +5,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework import status
 
 from django.contrib.auth.models import User
@@ -14,10 +15,22 @@ class TouristAttractionViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, ]
     filterset_fields = ['name', 'description', 'attractions']
     permission_classes = [IsAuthenticatedOrReadOnly, ]
+    lookup_field = "id"
     
     def get_queryset(self):
         queryset = TouristSpot.objects.filter(is_approved=True)
         return queryset
+    
+    @action(methods=['post'], detail=True)
+    def set_has_attractions(self, request, id):
+        attractions = request.data['ids']
+        
+        spot = TouristSpot.objects.get(id=id)
+        spot.attractions.set(attractions)
+        
+        serializer = self.get_serializer(instance=spot)
+        spot.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
